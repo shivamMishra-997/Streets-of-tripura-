@@ -66,7 +66,6 @@ function renderMembers(list){
           <span class="flip-hint">Click to flip</span>
         </div>
         <div class="flip-back">
-          <h3>${m.name}</h3>
           <p>${m.about}</p>
           <a href="${m.insta}" class="member-insta" target="_blank" rel="noopener" onclick="event.stopPropagation()">Instagram →</a>
         </div>

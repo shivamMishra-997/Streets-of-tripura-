@@ -1,3 +1,13 @@
+// ----- Page loader -----
+document.body.style.overflow = 'hidden';
+const pageLoader = document.getElementById('pageLoader');
+window.addEventListener('load', ()=>{
+  // Small min-display time so loader doesn't flash instantly on fast connections.
+  setTimeout(()=>{
+    pageLoader.classList.add('loader-hidden');
+    document.body.style.overflow = '';
+  }, 600);
+});
 // ----- Hamburger toggle -----
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');

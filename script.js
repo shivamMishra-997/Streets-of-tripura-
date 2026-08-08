@@ -12,18 +12,22 @@ window.addEventListener('load', ()=>{
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('navLinks');
 const navOverlay = document.getElementById('navOverlay');
+const menuClose = document.getElementById('menuClose');
 
 function closeMenu(){
   hamburger.classList.remove('open');
   navLinks.classList.remove('open');
   navOverlay.classList.remove('show');
+  hamburger.setAttribute('aria-expanded', 'false');
 }
 function toggleMenu(){
-  hamburger.classList.toggle('open');
+  const isOpen = hamburger.classList.toggle('open');
   navLinks.classList.toggle('open');
   navOverlay.classList.toggle('show');
+  hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 }
 hamburger.addEventListener('click', toggleMenu);
+menuClose.addEventListener('click', closeMenu);
 navOverlay.addEventListener('click', closeMenu);
 document.querySelectorAll('.nav-link').forEach(link=>{
   link.addEventListener('click', closeMenu);
@@ -40,6 +44,22 @@ const observer = new IntersectionObserver((entries)=>{
   });
 }, {rootMargin:'-45% 0px -50% 0px'});
 sections.forEach(sec=>observer.observe(sec));
+
+// ----- Home slideshow -----
+const heroSlides = Array.from(document.querySelectorAll('.hero-slide'));
+let heroSlideIndex = 0;
+
+function showNextHeroSlide(){
+  heroSlides.forEach((slide, index)=>{
+    slide.classList.toggle('active', index === heroSlideIndex);
+  });
+  heroSlideIndex = (heroSlideIndex + 1) % heroSlides.length;
+}
+
+if(heroSlides.length){
+  showNextHeroSlide();
+  setInterval(showNextHeroSlide, 7000);
+}
 
 // ----- Members: data -----
 // MEMBERS DATA: replace each entry with real member info.
@@ -103,9 +123,72 @@ const photos = [
 ];
 
 const sheet = document.getElementById('contactSheet');
+
+const lightbox = document.createElement('div');
+lightbox.className = 'gallery-lightbox';
+lightbox.innerHTML = `
+  <button class="lightbox-close" type="button" aria-label="Close preview">×</button>
+  <button class="lightbox-nav prev" type="button" aria-label="Previous image">‹</button>
+  <div class="lightbox-stage">
+    <img src="" alt="">
+  </div>
+  <button class="lightbox-nav next" type="button" aria-label="Next image">›</button>
+  <div class="lightbox-caption"></div>`;
+document.body.appendChild(lightbox);
+
+let currentGalleryItems = [];
+let currentLightboxIndex = 0;
+
+function openLightbox(item, items, index){
+  currentGalleryItems = items;
+  currentLightboxIndex = index;
+  const img = lightbox.querySelector('.lightbox-stage img');
+  const caption = lightbox.querySelector('.lightbox-caption');
+  img.src = item.src;
+  img.alt = `${item.cat} street photograph by ${item.who}`;
+  caption.innerHTML = `<strong>${item.cat}</strong><span>${item.who}</span>`;
+  lightbox.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox(){
+  lightbox.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function showLightboxItem(direction){
+  if(!currentGalleryItems.length) return;
+  currentLightboxIndex = (currentLightboxIndex + direction + currentGalleryItems.length) % currentGalleryItems.length;
+  openLightbox(currentGalleryItems[currentLightboxIndex], currentGalleryItems, currentLightboxIndex);
+}
+
+lightbox.addEventListener('click', (event)=>{
+  if(event.target === lightbox || event.target.classList.contains('lightbox-close')){
+    closeLightbox();
+  }
+});
+
+lightbox.querySelector('.lightbox-nav.prev').addEventListener('click', (event)=>{
+  event.stopPropagation();
+  showLightboxItem(-1);
+});
+
+lightbox.querySelector('.lightbox-nav.next').addEventListener('click', (event)=>{
+  event.stopPropagation();
+  showLightboxItem(1);
+});
+
+document.addEventListener('keydown', (event)=>{
+  if(!lightbox.classList.contains('show')) return;
+  if(event.key === 'Escape') closeLightbox();
+  if(event.key === 'ArrowRight') showLightboxItem(1);
+  if(event.key === 'ArrowLeft') showLightboxItem(-1);
+});
+
 function renderFrames(list){
+  currentGalleryItems = list;
   sheet.innerHTML = '';
-  list.forEach(p=>{
+  list.forEach((p, index)=>{
     const div = document.createElement('div');
     div.className = 'frame';
     div.dataset.cat = p.cat;
@@ -121,6 +204,7 @@ function renderFrames(list){
           <p class="credit">${p.who}</p>
         </div>
       </div>`;
+    div.addEventListener('click', ()=> openLightbox(p, list, index));
     sheet.appendChild(div);
   });
 }

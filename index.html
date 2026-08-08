@@ -61,10 +61,12 @@
 </div>
 <header class="navbar">
   <div class="nav-inner">
-    <!-- LOGO: replace text/icon here, or swap for an <img src="your-logo.png"> if you have one -->
-    <a href="#home" class="logo"><img src="logo.jpg" width="50" height="50"></a>  
+    <a href="#home" class="logo"><img src="logo.png" width="50" height="50"></a>  
     <nav>
       <ul class="nav-links" id="navLinks">
+        <button class="menu-close" id="menuClose" aria-label="Close menu" type="button">
+          ×
+        </button>
         <li><a href="#home" class="nav-link active">Home</a></li>
         <li><a href="#about" class="nav-link">About Us</a></li>
         <li><a href="#members" class="nav-link">Members</a></li>
@@ -74,8 +76,9 @@
         <li><a href="#contact" class="nav-link">Contact Us</a></li>
       </ul>
     </nav>
-    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
+      <span class="close-icon" aria-hidden="true">×</span>
     </button>
   </div>
 </header>
@@ -83,15 +86,23 @@
 
 <!-- HOME -->
 <section id="home" class="hero" style="border-bottom:none;">
-  <p class="hero-tag">Est. 2019 — Agartala, Tripura</p>
-  <h1>STREETS<br>OF <span class="line-red">TRIPURA</span></h1>
-  <p class="hero-sub">A collective of street and documentary photographers walking the lanes, markets, and monsoons of Tripura — one unposed frame at a time.</p>
-  <div class="hero-meta">
-    <div><b>340+</b>Members</div>
-    <div><b>12k</b>Frames Archived</div>
-    <div><b>28</b>Street Walks Held</div>
+  <div class="hero-slideshow" aria-hidden="true">
+    <div class="hero-slide active" style="background-image:url('asset/G1.jpeg');"></div>
+    <div class="hero-slide" style="background-image:url('asset/G2.jpeg');"></div>
+    <div class="hero-slide" style="background-image:url('asset/G3.jpeg');"></div>
+    <div class="hero-slide" style="background-image:url('asset/G4.jpeg');"></div>
   </div>
-  <a href="#gallery" class="explore-btn">Explore the Streets <span class="arrow">→</span></a>
+  <div class="hero-content">
+    <p class="hero-tag">Est. 2023 — Agartala, Tripura</p>
+    <h1>STREETS<br>OF <span class="line-red">TRIPURA</span></h1>
+    <p class="hero-sub">A collective of street and documentary photographers walking the lanes, markets, and monsoons of Tripura — one unposed frame at a time.</p>
+    <div class="hero-meta">
+      <div><b>340+</b>Members</div>
+      <div><b>12k</b>Frames Archived</div>
+      <div><b>28</b>Street Walks Held</div>
+    </div>
+    <a href="#gallery" class="explore-btn">Explore the Streets <span class="arrow">→</span></a>
+  </div>
 </section>
 
 <div class="sprocket-strip">
@@ -113,7 +124,7 @@
         <p>Every month we run open street-walks, portfolio critiques, and a print exchange — free for anyone who shows up with a camera and curiosity.</p>
       </div>
       <div class="stat-strip">
-        <div class="stat-box"><b>2019</b><span>Community Founded</span></div>
+        <div class="stat-box"><b>2023</b><span>Community Founded</span></div>
         <div class="stat-box"><b>08</b><span>Districts Covered</span></div>
         <div class="stat-box"><b>340+</b><span>Active Members</span></div>
         <div class="stat-box"><b>06</b><span>Print Exhibitions</span></div>
